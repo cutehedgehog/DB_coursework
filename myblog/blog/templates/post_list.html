@@ -1,0 +1,15 @@
+<!-- templates/post_list.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Post List{% endblock %}
+
+{% block content %}
+  <h2>Post List</h2>
+  <ul>
+    {% for post in posts %}
+      <li>{{ post.title }} - {{ post.content }} (by {{ post.user.username }})</li>
+    {% endfor %}
+  </ul>
+  <!-- Add more post-related information as needed -->
+{% endblock %}
