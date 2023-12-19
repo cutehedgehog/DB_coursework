@@ -12,8 +12,17 @@
     <header>
         <h1>{% block header %}My Blog{% endblock %}</h1>
         <nav>
+            {% if user.is_authenticated %}
+                <p>Hello, {{ user.username }}!
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </p>
+            {% else %}
+                <a href="{% url 'register' %}">Sign Up</a> | <a href="{% url 'login' %}">Sign In</a>
+            {% endif %}
             <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'user_profile' %}">Profile</a>
             <a href="{% url 'post_list' %}">Posts</a>
             <!-- Add any other navigation links or menu items here -->
         </nav>
