@@ -1,44 +1,49 @@
+# blog/views.py
 
 from django.shortcuts import render, redirect
+from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from .requests import register_user, authenticate_user, get_all_posts, get_user_profile
+from .forms import RegistrationForm, LoginForm
 from .models import CustomUser, UserProfile, Post, Comment, Tag, SubscriptionPlan, Like, Bookmark, Follow, Advertisement, Payment
+
 
 @login_required
 def user_profile(request):
     user = request.user
-    profile = UserProfile.objects.get(user=user)
+    profile = get_user_profile(user.id)
     return render(request, 'user_profile.html', {'user': user, 'profile': profile})
 
 def post_list(request):
-    posts = Post.objects.all()
+    posts = get_all_posts()
     return render(request, 'post_list.html', {'posts': posts})
 
 def home(request):
     return render(request, 'home.html')
 
-
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('home')  # Replace 'home' with the name of your home view
+            return redirect('home')
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
+
     return render(request, 'registration/register.html', {'form': form})
 
 def login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
+        form = LoginForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('home')  # Replace 'home' with the name of your home view
+            return redirect('home')
     else:
-        form = AuthenticationForm()
+        form = LoginForm()
+
     return render(request, 'registration/login.html', {'form': form})
 
 @login_required

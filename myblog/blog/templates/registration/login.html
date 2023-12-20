@@ -1,14 +1,13 @@
-<!-- templates/registration/login.html -->
+<!-- registration/login.html -->
 
 
-{% block title %}Login | My Blog{% endblock %}
-
-{% block header %}Login{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+<h2>Login</h2>
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
 {% endblock %}

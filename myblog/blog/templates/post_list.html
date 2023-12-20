@@ -1,15 +1,13 @@
-<!-- templates/post_list.html -->
-
 {% extends 'base.html' %}
-
-{% block title %}Post List{% endblock %}
+{% load static %}
+{% block title %}Posts{% endblock %}
 
 {% block content %}
-  <h2>Post List</h2>
-  <ul>
+    <h2>Posts</h2>
     {% for post in posts %}
-      <li>{{ post.title }} - {{ post.content }} (by {{ post.user.username }})</li>
+    <ul>
+          <li>{{ post.title }} - {{ post.content }} (by {{ post.user.username }})</li>
+
+      </ul>
     {% endfor %}
-  </ul>
-  <!-- Add more post-related information as needed -->
 {% endblock %}
