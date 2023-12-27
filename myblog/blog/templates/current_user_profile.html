@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+  {% if user_profile %}
+    <h2>{{ user_profile.username }}</h2>
+    <p>Email: {{ user_profile.email }}</p>
+    <p>Bio: {{ user_profile.bio }}</p>
+    <p>Followers: {{ user_profile.followers_count }}</p>
+    <!-- Add more profile-related information as needed -->
+
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
+  {% else %}
+    <p>No profile found for the current user.</p>
+  {% endif %}
+{% endblock %}

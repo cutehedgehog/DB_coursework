@@ -1,0 +1,18 @@
+<!-- templates/edit_post.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+    <h2>Edit Post</h2>
+    <form method="post" action="{% url 'edit_post' post.id %}">
+        {% csrf_token %}
+        <label for="new_title">New Title:</label>
+        <input type="text" id="new_title" name="new_title" value="{{ post.title }}"><br>
+        <label for="new_content">New Content:</label>
+        <textarea id="new_content" name="new_content">{{ post.content }}</textarea><br>
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!-- templates/add_comment.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Comment{% endblock %}
+
+{% block content %}
+    <h2>Add Comment</h2>
+    <form method="post" action="{% url 'add_comment' post_id=post.id %}">
+        {% csrf_token %}
+        <label for="content">Comment:</label>
+        <textarea id="content" name="content"></textarea><br>
+        <input type="submit" value="Add Comment">
+    </form>
+{% endblock %}

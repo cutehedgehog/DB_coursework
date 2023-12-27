@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+    {% if user_data %}
+    <h2>{{ user_data.username }}</h2>
+    <p>Email: {{ user_data.email }}</p>
+    <p>Bio: {{ user_data.bio }}</p>
+    <p>Followers: {{ user_data.followers_count }}</p>
+        <!-- Add other user details as needed -->
+
+        {% if is_following %}
+            <button id="unfollowButton" data-user-id="{{ user_data.id }}">Unfollow</button>
+        {% else %}
+            <button id="followButton" data-user-id="{{ user_data.id }}">Follow</button>
+        {% endif %}
+    {% else %}
+        <p>User not found.</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // jQuery script for handling follow/unfollow buttons
+    $(document).ready(function () {
+        $("#followButton, #unfollowButton").on("click", function () {
+            var target_user_id = $(this).data("user-id");
+
+            // Send a POST request to the toggle_follow view
+            $.ajax({
+                type: "POST",
+                url: "{% url 'toggle_follow' target_user_id=user_data.id%}",  // Use a placeholder value
+                data: {'target_user_id': target_user_id},  // Pass target_user_id in the data
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        // Reload the page to update the follow status
+                        location.reload();
+                    } else {
+                        console.log("Toggle follow failed:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.log("Error toggling follow:", error);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
