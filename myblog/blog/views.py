@@ -13,14 +13,13 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 
-
 @login_required
 def user_profile(request):
 
     with connection.cursor() as cursor:
         cursor.execute('SELECT * FROM get_current_user_profile_with_followers(%s, %s);', [request.user.id, request.user.id])
         user_data = cursor.fetchone()
-
+    print(user_data)
     context = {
         'user_profile': {
             'id': user_data[0],
@@ -127,8 +126,20 @@ def delete_post(request, post_id):
         cursor.callproc('delete_post', [post_id])
 
     # Redirect to a different page after deletion
-    return redirect('home')
+    return redirect('post_list')
 
+def add_post(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        user_id = request.user.id if request.user.is_authenticated else 1  # Replace with your logic to get the user ID
+
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT add_post(%s, %s, %s);', [title, content, user_id])
+
+        return redirect('post_list')
+
+    return render(request, 'add_post.html')
 
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -292,3 +303,63 @@ def profile_view(request, user_id):
     # Check if the current user is following the target user
     
     return render(request, 'profile.html', context)
+
+@login_required
+def edit_comment(request, post_id, comment_id):
+    # Fetch the comment details
+    with connection.cursor() as cursor:
+        cursor.callproc('get_comment_details', [comment_id])
+        comment_data = cursor.fetchone()
+    if request.method == 'POST':
+        # Handle the form submission for editing the comment
+        content = request.POST.get('content')
+
+        with connection.cursor() as cursor:
+            cursor.callproc('edit_comment', [comment_id, content])
+
+        return redirect('post_details', post_id)
+    print(comment_data)
+    # Prepare the context for rendering the edit comment form
+    context = {
+        'comment': {
+            'comment_id': comment_data[0],
+            'content': comment_data[1],
+            'created_at': comment_data[2],
+            'post_id': comment_data[3],
+        }
+    }
+
+    return render(request, 'edit_comment.html', context)
+@login_required
+def delete_comment(request, post_id, comment_id):
+    # Fetch the comment details
+    print(post_id)
+    with connection.cursor() as cursor:
+        cursor.callproc('delete_comment', [comment_id])
+
+    return redirect('post_details', post_id)
+
+
+@login_required
+def following(request):
+    current_user_id = request.user.id
+    with connection.cursor() as cursor:
+            cursor.callproc('get_following_users', [current_user_id])
+            following_data = cursor.fetchall()
+
+    # Convert comments data to a list of dictionaries
+    following_users = [
+    {
+        'user_id': follow[0],
+        'user_username': follow[1],
+    }
+        for follow in following_data
+    ]
+
+    print(following_users)
+    context = {
+        'following_users': following_users,
+    }
+
+    return render(request, 'following.html', context)
+

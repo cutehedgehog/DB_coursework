@@ -2,14 +2,36 @@
 
 {% block title %}User Profile{% endblock %}
 
+{% block styles %}
+  <style>
+    h2 {
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 10px;
+      margin-left:10px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 8px 12px;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+  </style>
+{% endblock %}
+
 {% block content %}
   {% if user_profile %}
     <h2>{{ user_profile.username }}</h2>
     <p>Email: {{ user_profile.email }}</p>
     <p>Bio: {{ user_profile.bio }}</p>
     <p>Followers: {{ user_profile.followers_count }}</p>
-    <!-- Add more profile-related information as needed -->
-
+    
     <a href="{% url 'edit_profile' %}">Edit Profile</a>
   {% else %}
     <p>No profile found for the current user.</p>

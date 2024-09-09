@@ -1,9 +1,7 @@
-<!-- templates/add_comment.html -->
-
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Add Comment{% endblock %}
+{% block title %}Edit Comment{% endblock %}
 {%block styles%} 
 <style>/* Add these styles to the existing styles in the <style> tag or your CSS file */
 
@@ -42,11 +40,12 @@
     </style>
 {%endblock%}
 {% block content %}
-    <h2>Add Comment</h2>
-    <form method="post" action="{% url 'add_comment' post_id=post.id %}">
+    <h2>Edit Comment</h2>
+    <form method="post" action="{% url 'edit_comment' post_id=comment.post_id comment_id=comment.comment_id %}">
         {% csrf_token %}
         <label for="content">Comment:</label>
-        <textarea id="content" name="content"></textarea><br>
-        <input type="submit" value="Add Comment">
+        <textarea id="content" name="content">{{ comment.content }}</textarea><br>
+        <input type="submit" value="Save Changes">
     </form>
+    <a href="{% url 'post_details' post_id=comment.post_id %}">Cancel</a>
 {% endblock %}

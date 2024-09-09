@@ -1,0 +1,16 @@
+<!-- templates/subscription_plans.html -->
+
+{% extends 'base.html' %}
+{% block title %}Subscription Plans{% endblock %}
+
+{% block content %}
+  <h2>Subscription Plans</h2>
+  <ul>
+    {% for plan in plans %}
+      <li>
+        {{ plan.name }} - {{ plan.description }} - ${{ plan.price }}
+        <a href="{% url 'subscribe' plan.id %}">Subscribe</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

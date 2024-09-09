@@ -5,8 +5,50 @@
 
 {% block title %}Posts{% endblock %}
 
+
+{% block styles %}
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+
 {% block content %}
+
     <h2>Posts</h2>
+    {% if user.is_authenticated %}
+<a href="{% url 'add_post' %}">Add Post</a>
+<br>
+{%endif%}
     {% for post in posts %}
         <ul>
             <li>

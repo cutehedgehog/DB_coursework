@@ -17,6 +17,8 @@ path('posts/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
 path('toggle_like/<int:post_id>/', views.toggle_like, name='toggle_like'),
 path('toggle_follow/<int:target_user_id>/', views.toggle_follow, name='toggle_follow'),
 path('profile/<int:user_id>/', views.profile_view, name='profile_view'),
-
-
+path('add_post/', views.add_post, name='add_post'),
+path('posts/<int:post_id>/comments/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
+path('posts/<int:post_id>/comments/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
+    path('following/', views.following, name='following'),
 ]

@@ -38,12 +38,19 @@ class CustomGroup(Group):
     def _get_permissions_query(cls, perms, ctype):
         return super()._get_permissions_query(perms, ctype).using('default')
 
-
+class SubscriptionPlan(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    duration = models.IntegerField()
+    
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField()
     avatar_url = models.CharField(max_length=255)
     followers_count = models.IntegerField(default=0)
+    subscription = models.ForeignKey(SubscriptionPlan, on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return self.user.username
  
@@ -101,13 +108,6 @@ class Advertisement(models.Model):
     image_url = models.CharField(max_length=255, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
-
-class SubscriptionPlan(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.IntegerField()
 
 class Payment(models.Model):
     id = models.AutoField(primary_key=True)

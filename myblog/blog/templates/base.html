@@ -6,25 +6,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Blog{% endblock %}</title>
-    <!-- Add your CSS links or stylesheets here -->
+    {% block styles %}
+       
+    {% endblock %}
+    <style>
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #444;
+            padding: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: #555;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>{% block header %}My Blog{% endblock %}</h1>
+        {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </p>
+    {% else %}
+        <a href="{% url 'register' %}">Sign Up</a> | <a href="{% url 'login' %}">Sign In</a>
+    {% endif %}
         <nav>
-            {% if user.is_authenticated %}
-                <p>Hello, {{ user.username }}!
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit">Logout</button>
-                    </form>
-                </p>
-            {% else %}
-                <a href="{% url 'register' %}">Sign Up</a> | <a href="{% url 'login' %}">Sign In</a>
-            {% endif %}
             <a href="{% url 'post_list' %}">All posts</a>
             <a href="{% url 'user_profile' %}">Profile</a>
-             </nav>
+            <a href="{% url 'following' %}">Following Users</a>
+        </nav>
     </header>
 
     <main>

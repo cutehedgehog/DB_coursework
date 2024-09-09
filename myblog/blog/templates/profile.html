@@ -2,7 +2,10 @@
 {% load static %}
 
 {% block title %}User Profile{% endblock %}
-
+{%block styles%} 
+<style>
+</style>
+{%endblock%}
 {% block content %}
     {% if user_data %}
     <h2>{{ user_data.username }}</h2>

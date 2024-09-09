@@ -4,7 +4,10 @@
 {% load static %}
 
 {% block title %}Post Details{% endblock %}
-
+{%block styles%} 
+<style>
+</style>
+{%endblock%}
 {% block content %}
     <h2>{{ post.title }}</h2>
     <p>{{ post.content }}</p>
@@ -28,7 +31,19 @@
     {% if comments %}
         <ul>
             {% for comment in comments %}
-                <li>{{ comment.content }} - {{ comment.user_username }}</li>
+                <li>
+                    {{ comment.content }} - {{ comment.user_username }}
+                    {% if request.user.is_authenticated %}
+                        {% if comment.user_id == request.user.id or request.user.is_superuser %}
+                        <!-- Assuming this is inside a loop that iterates over comments -->
+                        <a href="{% url 'delete_comment' post_id=post.id comment_id=comment.comment_id %}">Delete</a>
+                       {% if comment.user_id == request.user.id %}
+                       <a href="{% url 'edit_comment' post_id=post.id comment_id=comment.comment_id %}">Edit</a>
+                        
+                            {%endif%}
+                        {% endif %}
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
     {% else %}
@@ -38,6 +53,7 @@
     {% if not is_current_user_post %}
         <a href="{% url 'add_comment' post.id %}">Add Comment</a>
     {% endif %}
+
 {% endblock %}
 
 {% block scripts %}

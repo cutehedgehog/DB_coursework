@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Following Users{% endblock %}
+{%block styles%} 
+<style>
+</style>
+{%endblock%}
+{% block content %}
+    <h2>Following Users</h2>
+    
+    {% if following_users %}
+        <ul>
+            {% for user in following_users %}
+            <li><a href="{% url 'profile_view' user.user_id%}">{{ user.user_username }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You are not following any users.</p>
+    {% endif %}
+{% endblock %}
